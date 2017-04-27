@@ -10,9 +10,8 @@
  */
 
 namespace Gesdinet\JWTRefreshTokenBundle\Service;
-
+use Mindband\etrainingBundle\Security\AuthenticationHandler;
 use Symfony\Component\HttpFoundation\Request;
-use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationFailureHandler;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
@@ -32,7 +31,7 @@ class RefreshToken
     private $ttl;
     private $ttlUpdate;
 
-    public function __construct(RefreshTokenAuthenticator $authenticator, RefreshTokenProvider $provider, AuthenticationSuccessHandler $successHandler, AuthenticationFailureHandler $failureHandler, RefreshTokenManagerInterface $refreshTokenManager, $ttl, $providerKey, $ttlUpdate)
+    public function __construct(RefreshTokenAuthenticator $authenticator, RefreshTokenProvider $provider, AuthenticationHandler $successHandler, AuthenticationFailureHandler $failureHandler, RefreshTokenManagerInterface $refreshTokenManager, $ttl, $providerKey, $ttlUpdate)
     {
         $this->authenticator = $authenticator;
         $this->provider = $provider;
@@ -80,6 +79,6 @@ class RefreshToken
             $this->refreshTokenManager->save($refreshToken);
         }
 
-        return $this->successHandler->onAuthenticationSuccess($request, $preAuthenticatedToken);
+        return $this->successHandler->handleRefreshSuccess($preAuthenticatedToken, $refreshToken);
     }
 }

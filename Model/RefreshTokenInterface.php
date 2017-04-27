@@ -86,4 +86,11 @@ interface RefreshTokenInterface
      * @return self
      */
     public function setOrganization($organization);
+
+    /**
+     * Get organization.
+     *
+     * @return $organization
+     */
+    public function getOrganization();
 }

@@ -183,7 +183,7 @@ class RefreshToken implements RefreshTokenInterface
     /**
      * @param string $organization
      */
-    public function setOrganization(string $organization)
+    public function setOrganization($organization)
     {
         $this->organization = $organization;
     }
