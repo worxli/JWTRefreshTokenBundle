@@ -77,4 +77,13 @@ interface RefreshTokenInterface
      * @return bool
      */
     public function isValid();
+
+    /**
+     * Set organization
+     *
+     * @param $organization
+     *
+     * @return self
+     */
+    public function setOrganization($organization);
 }
