@@ -175,7 +175,7 @@ class RefreshToken implements RefreshTokenInterface
     /**
      * @return string
      */
-    public function getOrganization(): string
+    public function getOrganization()
     {
         return $this->organization;
     }
