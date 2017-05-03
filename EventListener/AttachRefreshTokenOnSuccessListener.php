@@ -49,30 +49,33 @@ class AttachRefreshTokenOnSuccessListener
         if ($refreshTokenString) {
             $data['refresh_token'] = $refreshTokenString;
         } else {
-            $datetime = new \DateTime();
-            $datetime->modify('+'.$this->ttl.' seconds');
+            foreach ($data as $key => $token) {
+                $datetime = new \DateTime();
+                $datetime->modify('+' . $this->ttl . ' seconds');
 
-            $refreshToken = $this->refreshTokenManager->create();
-            $refreshToken->setUsername($user->getUsername());
-            $refreshToken->setRefreshToken();
-            $refreshToken->setValid($datetime);
+                $refreshToken = $this->refreshTokenManager->create();
+                $refreshToken->setUsername($user->getUsername());
+                $refreshToken->setRefreshToken();
+                $refreshToken->setValid($datetime);
+                $refreshToken->setOrganization($key);
 
-            $valid = false;
-            while (false === $valid) {
-                $valid = true;
-                $errors = $this->validator->validate($refreshToken);
-                if ($errors->count() > 0) {
-                    foreach ($errors as $error) {
-                        if ('refreshToken' === $error->getPropertyPath()) {
-                            $valid = false;
-                            $refreshToken->setRefreshToken();
+                $valid = false;
+                while (false === $valid) {
+                    $valid = true;
+                    $errors = $this->validator->validate($refreshToken);
+                    if ($errors->count() > 0) {
+                        foreach ($errors as $error) {
+                            if ('refreshToken' === $error->getPropertyPath()) {
+                                $valid = false;
+                                $refreshToken->setRefreshToken();
+                            }
                         }
                     }
                 }
-            }
 
-            $this->refreshTokenManager->save($refreshToken);
-            $data['refresh_token'] = $refreshToken->getRefreshToken();
+                $this->refreshTokenManager->save($refreshToken);
+                $data[$key]['refresh_token'] = $refreshToken->getRefreshToken();
+            }
         }
 
         $event->setData($data);

@@ -59,6 +59,14 @@ class RefreshToken implements RefreshTokenInterface
     protected $valid;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="organization", type="string", length=255)
+     * @Assert\NotBlank()
+     */
+    protected $organization;
+
+    /**
      * Get id.
      *
      * @return int
@@ -162,5 +170,21 @@ class RefreshToken implements RefreshTokenInterface
     public function __toString()
     {
         return $this->getRefreshToken();
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * @param string $organization
+     */
+    public function setOrganization($organization)
+    {
+        $this->organization = $organization;
     }
 }
